@@ -21,38 +21,34 @@ public class Main {
 			dp[a][b] = 1;
 		}
 
-		for (int i = 1; i <= n; i++) {
-			for (int j = 1; j <= n; j++) {
-				if (dp[i][j] == 0) {
-					dp[i][j] = 9;
-				}
-				if (i == j) {
-					dp[i][j] = 0;
-				}
-			}
-		}
-
 		for (int k = 1; k <= n; k++) {
 			for (int i = 1; i <= n; i++) {
+				if (i == k || dp[i][k] == 0)
+					continue;
 				for (int j = 1; j <= n; j++) {
-					dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k][j]);
+					if (dp[i][j] == 1)
+						continue;
+					dp[i][j] = dp[k][j];
 				}
 			}
 		}
 
-		int cnt = 0;
+		int ans = 0;
 		for (int i = 1; i <= n; i++) {
-			boolean ok = true;
+			int cnt = 0;
 			for (int j = 1; j <= n; j++) {
-				if (dp[i][j] == 9 && dp[j][i] == 9) {
-					ok = false;
+				if (dp[i][j] == 1) {
+					cnt++;
+				}
+				if (dp[j][i] == 1) {
+					cnt++;
 				}
 			}
-			if (ok) {
-				cnt++;
+			if (cnt == n - 1) {
+				ans++;
 			}
 		}
 
-		System.out.println(cnt);
+		System.out.println(ans);
 	}
 }
