@@ -3,10 +3,10 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String args[]) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String args[]) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-        
+
 		int n = Integer.parseInt(st.nextToken());
 		int d = Integer.parseInt(st.nextToken());
 		int k = Integer.parseInt(st.nextToken());
@@ -18,7 +18,7 @@ public class Main {
 		}
 
 		// end input
-		
+
 		int max = -1;
 		int cnt = 0;
 		int[] visited = new int[d + 1];
@@ -31,18 +31,16 @@ public class Main {
 			visited[sushi[i]]++;
 		}
 		if (visited[c] == 0) {
-			free = true;
-		}
-		if (free) {
 			max = Math.max(max, cnt + 1);
-		} else {
+		}
+		else {
 			max = Math.max(max, cnt);
 		}
 
 
 		int sp = 0;
 		int ep = k - 1;
-		while(sp != n) {
+		while (sp != n) {
 			sp++;
 			ep = (ep + 1) % n;
 			visited[sushi[sp - 1]]--;
@@ -54,20 +52,15 @@ public class Main {
 			}
 			visited[sushi[ep]]++;
 
-			if (visited[c] != 0) {
-				free = false;
-			} else {
-				free = true;
-			}
-
-			if (free) {
+			if (visited[c] == 0) {
 				max = Math.max(max, cnt + 1);
-			} else {
+			}
+			else {
 				max = Math.max(max, cnt);
 			}
 		}
 
 		System.out.println(max);
-        
-    }
+
+	}
 }
