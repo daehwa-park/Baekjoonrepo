@@ -44,8 +44,8 @@ public class Main {
 					ans = Math.min(ans, time);
 				}
 				if (map[cur.x][cur.y] == 2) {
-					int dist = Math.abs(cur.x - (n - 1)) + Math.abs(cur.y - (m - 1));
-					if (time + dist > t) {
+					int dist = Math.abs(cur.x - (n - 1)) + Math.abs(cur.y - (m - 1)); // 맨하탄 거리 = 벽을 뚫을 수 있기 때문에
+					if (time + dist > t) { // t와 같아도 구할 수 있기 때문에 t 포함 x
 						return;
 					}
 					ans = Math.min(ans, time + dist);
@@ -61,7 +61,7 @@ public class Main {
 					}
 				}
 			}
-			if (time >= t) {
+			if (time >= t) { // t와 같을 때 확인하는 것을 이미 했기 때문에 t 포함
 				return;
 			}
 			time++;
