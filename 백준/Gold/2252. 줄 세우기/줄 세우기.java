@@ -13,12 +13,10 @@ public class Main {
 
 	public static void bfs() {
 		Queue<Integer> q = new ArrayDeque<>();
-		boolean[] visited = new boolean[n + 1];
 
 		for (int i = 1; i <= n; i++) {
 			if (in_degree[i] == 0) {
 				q.offer(i);
-				visited[i] = true;
 			}
 		}
 
@@ -28,15 +26,9 @@ public class Main {
 			sb.append(cur + " ");
 
 			for (int i = 0; i < adj[cur].size(); i++) {
-				if (in_degree[adj[cur].get(i)] > 0) {
-					in_degree[adj[cur].get(i)]--;
-				}
-			}
-
-			for (int i = 1; i <= n; i++) {
-				if (in_degree[i] == 0 && !visited[i]) {
-					q.offer(i);
-					visited[i] = true;
+                in_degree[adj[cur].get(i)]--;
+				if (in_degree[adj[cur].get(i)] == 0) {
+					q.offer(adj[cur].get(i));
 				}
 			}
 		}
