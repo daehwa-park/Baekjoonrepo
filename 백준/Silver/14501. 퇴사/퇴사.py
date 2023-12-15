@@ -1,22 +1,24 @@
 import sys
 
-def sol(day, price):
-    global ans
-    ans = max(ans, price)
+def sol(day):
     if day == n:
-        return
+        return 0
+    if day > n:
+        return -1000000
+    if d[day] != -1:
+        return d[day]
 
-    if day + arr[day][0] <= n:
-        sol(day + arr[day][0], price + arr[day][1])
-    if day + 1 <= n:
-        sol(day + 1, price)
+    t1 = sol(day + arr[day][0]) + arr[day][1]
+    t2 = sol(day + 1)
 
-ans = 0
+    d[day] = max(t1, t2)
+    return d[day]
 
 n = int(sys.stdin.readline())
 
 arr = [list(map(int, sys.stdin.readline().split())) for _ in range(n)]
+d = [-1 for _ in range(n)]
 
-sol(0, 0)
+ans = sol(0)
 
 print(ans)
