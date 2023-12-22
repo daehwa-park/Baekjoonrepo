@@ -1,19 +1,14 @@
 sale = [10, 20, 30, 40]
-result = [0] * 7
-max_plus = 0
-max_price = 0
+max_arr = [0, 0]
 
-def solution(users, emoticons):
-    answer = []
+def solution(users, emoticons): 
+    result = [0 for _ in range(len(emoticons))]
     
-    #result = [0 for _ in range(len(emoticons))]
-    
-    go(0, len(emoticons), users, emoticons)
-    
-    return [max_plus, max_price]
+    go(0, len(emoticons), users, emoticons, result)
+    return max_arr
 
-def go(cnt, dst, users, emoticons):
-    global max_plus, max_price
+def go(cnt, dst, users, emoticons, result):
+    global max_arr
     if cnt == dst:
         # 계산
         all_price = 0
@@ -27,13 +22,9 @@ def go(cnt, dst, users, emoticons):
                 all_plus += 1
             else:
                 all_price += price
-        if max_plus < all_plus:
-            max_plus = all_plus
-            max_price = all_price
-        elif max_plus == all_plus and max_price <= all_price:
-            max_price = all_price
+        max_arr = max(max_arr, [all_plus, all_price])
         return
     
     for i in sale:
         result[cnt] = i
-        go(cnt + 1, dst, users, emoticons)
+        go(cnt + 1, dst, users, emoticons,result)
