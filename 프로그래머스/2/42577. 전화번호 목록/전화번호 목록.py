@@ -1,9 +1,15 @@
 def solution(phone_book):
     answer = True
-    phone_book.sort()
     
-    for p1, p2 in zip(phone_book, phone_book[1:]):
-        if p2.startswith(p1):
-            answer = False
-            
+    hash_map = {}
+    
+    for phone_num in phone_book:
+        hash_map[phone_num] = 1
+    for phone_num in phone_book:
+        temp = ""
+        for number in phone_num:
+            temp += number
+            if temp in hash_map and phone_num != temp:
+                answer = False
+    
     return answer
