@@ -36,7 +36,7 @@ def go(cnt, dst, visited, num_list, result, dic):
 def is_prime(number):
     if number == 1 or number == 0:
         return False
-    for i in range(2, number):
+    for i in range(2, int(number ** 0.5) + 1):
         if number % i == 0:
             return False
     return True
