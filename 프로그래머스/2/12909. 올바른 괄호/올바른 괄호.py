@@ -1,24 +1,13 @@
 from collections import deque
 
 def solution(s):
-    answer = True
-    
-    stack = deque()
-    
-    for brace in s:
-        stack.append(brace)
-        
     count = 0
-    while stack:
-        cur = stack.pop()
-        if cur == ')':
+    for b in s:
+        if b == '(':
             count += 1
-        elif cur == '(' and count >= 1:
+        elif b == ')' and count >= 1:
             count -= 1
         else:
             return False
-    
-    if count > 0:
-        return False
 
-    return True
+    return count == 0
