@@ -1,18 +1,15 @@
+from collections import Counter
+
 def solution(k, tangerine):
     answer = 0
     
-    h = [0 for _ in range(10000001)]
-    
-    for t in tangerine:
-        h[t] += 1
-        
-    h.sort(reverse=True)
+    h = Counter(tangerine)
     
     sum = 0
-    for i, p in enumerate(h):
-        sum += p
+    for i in sorted(h.values(), reverse=True):
+        sum += i
+        answer += 1
         if sum >= k:
-            answer = i + 1
             break
     
     return answer
