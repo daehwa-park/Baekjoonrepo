@@ -18,13 +18,9 @@ def solution(storey):
         elif num < 5:
             answer += num
         else:
+            answer += 5
             if i != len(slist) - 1 and slist[i + 1] > 4:
-                answer += 5
                 slist[i + 1] += 1
-            elif i != len(slist) - 1 and slist[i + 1] <= 4:
-                answer += 5
-            else:
-                answer += 5
                 
     return answer
 
