@@ -10,6 +10,7 @@ class Solution {
             n /= k;
         }
         // 진수 변환
+        // Integer.toString(n,k)로 바로 진수 변환 가능
         
         System.out.print(s);
         
