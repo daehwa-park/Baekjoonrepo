@@ -1,95 +1,68 @@
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class Main {
-	static int n, m;
-	static ArrayList<Pos>[] al;
-	static int[] distance;
-	static boolean[] visited;
-	static int end;
+class Main {
+    static int n;
 
-	public static class Pos implements Comparable<Pos> {
-		int to;
-		int weight;
+    public static int dijkstra(int s, int e, ArrayList<ArrayList<int[]>> list) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((Comparator.comparingInt(o -> o[1])));
+        boolean[] visited = new boolean[n + 1];
+        int[] distance = new int[n + 1];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[s] = 0;
 
-		public Pos(int to, int weight) {
-			this.to = to;
-			this.weight = weight;
-		}
+        pq.offer(new int[]{s, 0});
 
-		@Override
-		public int compareTo(Pos o) {
-			return this.weight - o.weight;
-		}
+        while(!pq.isEmpty()) {
+            int[] cur = pq.poll();
 
-		@Override
-		public String toString() {
-			return "Pos [to=" + to + ", weight=" + weight + "]";
-		}
-	}
+            if(visited[cur[0]]) continue;
 
-	public static int dijkstra(int start) {
-		PriorityQueue<Pos> pq = new PriorityQueue<>();
-		visited = new boolean[n + 1];
-		distance = new int[n + 1];
-		Arrays.fill(distance, Integer.MAX_VALUE);
-		distance[start] = 0;
+            visited[cur[0]] = true;
 
-		pq.offer(new Pos(start, 0));
+            if(cur[0] == e) {
+                return cur[1];
+            }
 
-		while (!pq.isEmpty()) {
-			Pos cur = pq.poll();
+            for(int[] d : list.get(cur[0])) {
+                if(!visited[d[0]] && distance[d[0]] > distance[cur[0]] + d[1]) {
+                    distance[d[0]] = distance[cur[0]] + d[1];
+                    pq.offer(new int[]{d[0], distance[d[0]]});
+                }
+            }
+        }
+        return -1;
+    }
 
-			if (visited[cur.to])
-				continue;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-			visited[cur.to] = true;
+        n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
 
-			if (cur.to == end) {
-				return cur.weight;
-			}
+        ArrayList<ArrayList<int[]>> list = new ArrayList<>();
+        for(int i = 0; i <= n; i++) {
+            list.add(new ArrayList<>());
+        }
 
-			for (Pos p : al[cur.to]) {
-				if (!visited[p.to] && distance[p.to] > distance[cur.to] + p.weight) {
-					distance[p.to] = distance[cur.to] + p.weight;
-					pq.offer(new Pos(p.to, distance[p.to]));
-				}
-			}
-		}
-		return -1;
-	}
+        for(int i = 0; i < m; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            int weight = Integer.parseInt(st.nextToken());
 
-		n = Integer.parseInt(br.readLine());
-		m = Integer.parseInt(br.readLine());
-		al = new ArrayList[n + 1];
-		for (int i = 1; i <= n; i++) {
-			al[i] = new ArrayList<>();
-		}
+            list.get(start).add(new int[]{end, weight});
+        }
 
-		for (int i = 0; i < m; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int from = Integer.parseInt(st.nextToken());
-			int to = Integer.parseInt(st.nextToken());
-			int weight = Integer.parseInt(st.nextToken());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int s = Integer.parseInt(st.nextToken());
+        int e = Integer.parseInt(st.nextToken());
 
-			al[from].add(new Pos(to, weight));
-		}
+        int result = dijkstra(s, e, list);
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int start = Integer.parseInt(st.nextToken());
-		end = Integer.parseInt(st.nextToken());
-
-		int result = dijkstra(start);
-
-		System.out.println(result);
-
-		br.close();
-	}
+        System.out.println(result);
+    }
 }
