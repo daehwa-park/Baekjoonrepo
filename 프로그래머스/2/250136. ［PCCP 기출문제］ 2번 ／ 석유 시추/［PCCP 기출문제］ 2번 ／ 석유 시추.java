@@ -4,68 +4,69 @@ class Solution {
     static int[] di = {0, 1, 0, -1};
     static int[] dj = {1, 0, -1, 0};
     
-    static public int bfs(int[][] land, boolean[][] visited, ArrayList<Integer> line, int i, int j, int count) {
+    public int bfs(int i, int j, boolean[][] visited, int cnt, int[][] land, ArrayList<ArrayList<Integer>> line) {
         Queue<int[]> q = new ArrayDeque<>();
         q.offer(new int[]{i, j});
         visited[i][j] = true;
-        line.add(j);
-        int cnt = 1;
+        land[i][j] = cnt;
         
+        int oil = 1;
         while(!q.isEmpty()) {
             int[] cur = q.poll();
+            
+            if(!line.get(cur[1]).contains(cnt)) {
+                line.get(cur[1]).add(cnt);
+            }
+            
             for(int d = 0; d < 4; d++) {
                 int ni = cur[0] + di[d];
                 int nj = cur[1] + dj[d];
-                if(ni >= 0 && ni < visited.length && nj >= 0 && nj < visited[0].length && !visited[ni][nj] && land[ni][nj] == 1) {
+                
+                if(ni >= 0 && ni < land.length && nj >= 0 && nj < land[0].length && !visited[ni][nj] && land[ni][nj] == 1) {
                     q.offer(new int[]{ni, nj});
                     visited[ni][nj] = true;
-                    cnt++;
-                    if(!line.contains(nj)) {
-                        line.add(nj);
-                    }
+                    land[ni][nj] = cnt;
+                    oil++;
                 }
             }
-            
         }
         
-        return cnt;
+        return oil;
     }
     
     public int solution(int[][] land) {
-        int answer = 0;
         
-        int n = land.length;
-        int m = land[0].length;
+        int row = land.length;
+        int col = land[0].length;
         
+        boolean[][] visited = new boolean[row][col];
+        int cnt = 1;
+        
+        HashMap<Integer, Integer> map = new HashMap<>();
         ArrayList<ArrayList<Integer>> line = new ArrayList<>();
-        int count = 0;
+        for(int i = 0; i < col; i++) {
+            line.add(new ArrayList<>());
+        }
         
-        HashMap<Integer, Integer> hmap = new HashMap<>();
-        
-        boolean[][] visited = new boolean[n][m];
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
-                if(land[i][j] == 1 && !visited[i][j]) {
-                    line.add(new ArrayList<>());
-                    int max = bfs(land, visited, line.get(count), i, j, count);
-                    hmap.put(count, max);
-                    count++;
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < col; j++) {
+                if(land[i][j] == 1 && !visited[i][j]){
+                    int oil = bfs(i, j, visited, cnt, land, line);
+                    map.put(cnt, oil);
+                    cnt++;
                 }
             }
         }
         
-        int[] oil = new int[m];
-        for(int i = 0; i < line.size(); i++) {
-            for(int j : line.get(i)) {
-                oil[j] += hmap.get(i);
+        int max = 0;
+        for(int i = 0; i < col; i++) {
+            int tmp = 0;
+            for(int j = 0; j < line.get(i).size(); j++) {
+                tmp += map.get(line.get(i).get(j));
             }
+            max = Math.max(max, tmp);
         }
         
-        for(int i = 0; i < m; i++) {
-            answer = Math.max(answer, oil[i]);
-        }
-        
-        
-        return answer;
+        return max;
     }
 }
